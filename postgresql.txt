@@ -1,0 +1,28 @@
+간단 미션) 다음의 컬럼들과 조건을 가진 테이블을 생성해라.
+
+상태 > 1. 가입 , 2. 탈퇴
+아이디
+비밀번호
+이름
+성별
+휴대전화화
+등록일
+수정일
+노출여부 > Y, N
+
+등록일, 수정일 은 디폴트 값이 오늘/현시간
+모든 컬럼 not null
+
+
+create table t_sh_mbr (
+    mb_seq integer primary key ,
+    mb_stat char(1) not null check (mb_stat='1' or mb_stat='2') ,
+    mb_id varchar(15) not null ,
+    mb_pwd varchar(20) not null ,
+    mb_nm varchar(90) not null ,
+    mb_gen char(1) not null check (mb_gen='M' or mb_gen='F') ,
+    mb_ph varchar(25) not null ,
+    mb_strt_ymd date not null default current_date ,
+    mb_mod_ymd date not null default current_date ,
+    mb_exps_yn char(1) not null check (mb_exps_yn='Y' or mb_exps_yn='N')
+);
