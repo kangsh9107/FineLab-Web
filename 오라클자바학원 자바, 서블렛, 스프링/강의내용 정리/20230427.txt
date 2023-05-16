@@ -1,0 +1,45 @@
+** JSP/Servlet & MVC1 (JSP에 자바 있음)
+
+
+1. webdev > webapp > board > insert, insert_action, list, content, update, update_action, delete, delete_action
+   webdev > src/main/java > board.model > BoardDto, BoardDao
+   webdev > webapp > WEB-INF > web.xml
+
+2.  Servers > Tomcat > server.xml
+	커넥션 풀(Connection Pool)
+	   : 1) DB와 연결된 커넥션을 미리 만들어서 풀 속에 저장해두고,
+	        필요할 때 커넥션을 풀에서 가져다 쓰고 반환하는 기법.
+
+		META-INF > context.xml 에 등록해두면 톰캣에서 프로젝트 연결 지워도 다시 등록할 필요 없이 자동으로 연결
+		<Resource name="OracleCP"
+			auth="Container"
+			driverClassName="oracle.jdbc.OracleDriver"
+			url="jdbc:oracle:thin:@localhost:1521/xepdb1"
+			username="oraclejava"
+			password="oraclejava"
+			type="javax.sql.DataSource"
+			maxActive="50"
+			maxWait="-1"/>
+	     2) 
+
+
+
+** MVC2 (JSP에 자바 없음)
+
+
+1. webdev > webapp > game > game, game_action
+   webdev > src/main/java > servlet > GameServlet
+   webdev > webapp > WEB-INF > web.xml
+
+   webdev > src/main/java > board.controller > DispatcherServlet
+   webdev > webapp > WEB-INF > web.xml
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,57 @@
+** MVC2
+
+
+
+요청			내용
+======================================================================
+/Login.do			로그인 폼 출력
+/LoginAction.do		id, password가 일치하면 로그인 성공, 그렇지 안흥면 로그인 실패
+/MemberRegister.do	회원가입 품 출력
+/MemberRegisterAction.do	회원가입 폼에서 넘어온 값을 테이블에 INSERT
+
+/BoardInsert.do		게시판 입력 폼 출력
+/BoardInsertAction.do	게시판 입력 폼에서 넘어온 값을 테이블에 INSERT
+/BoardList.do		게시판 리스트
+/BoardView.do		게시판 상세보기
+/BoardUpdate.do		게시판 수정 폼에 게시물 내용 출력
+/BoardUpdateAction.do	게시판 수정 폼에서 넘어온 값을 테이블에 UPDATE
+/BoardDelete.do		게시물 입력시 비밀번호 재입력 폼 출력
+/BoardDeleteAction.do	게시물의 글번호와 비밀번호 일치시 게시물 DELETE
+			=> 게시물 삭제 후 다시 리스트로
+
+1. webdev > src/main/java > board.controller > *
+   webdev > webapp > WEB-INF > board (WEB-INF에 있으면 웹에서 url로 접근 할 수 없다) > *
+
+2. JSTL (JSP Standard Tag Library)
+   : 자바를 쓰지 않아도 제어문을 사용할 수 있게 해준다
+	http://jakarta.apache.org > 좌측 Taglibs > 상단 Apache Standard Taglib >
+	Standard 1.1 download 클릭 > binaries 클릭 > jakarta-taglibs-standard-1.1.2.zip 다운 >
+	압축풀기 > lib 폴더 2개 복사해서 WEB-INF lib폴더에 붙여넣기
+
+3. webdev > webapp > ajax01 > *
+   AJAX (Asynchronous Javascript And Xml)
+   1) 자바스크립트와 xml을 이용한 비동기적 통신
+      : 웹 상의 비동기적 통신 (요즘은 xml뿐 아니라 json등 다양한 방식으로 데이터를 가져오기 때문에 개념이 조금 바꼈다)
+   2) 사용 예 - 네이버 검색어, 구글 지도, 댓글 등
+   3) xhr.readyState
+      : 0 - uninitialized
+        1 - open()
+        2 - send()
+        3 - interactive   데이터 일부를 receive
+        4 - complete   응답완료
+      xhr.status
+      : 404 - file not found
+        500 - server intend error
+        200 - ok
+
+4. 커먼스 코덱(commons codec) 라이브러리
+   : 비밀번호 암호화
+	https://commons.apache.org
+	살짝 내려서 Codec 클릭 > 1.14(릴리즈) 클릭 > commons-codec-1.2.zip 다운 > 압축풀기 > commons-codec-1.2.jar 복사 > lib에 붙여넣기
+
+
+
+
+
+
+

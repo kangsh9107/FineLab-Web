@@ -1,0 +1,76 @@
+** 웹 환경 설정
+webdev 다이나믹 프로젝트
+webapp > WEB-INF > web.xml
+webapp > index.jsp
+webapp > basic > source.jsp, target.jsp
+webapp > jdbc > connTest.jsp
+
+
+
+1. 톰캣 다운 및 연결
+   : 웹 어플리케이션 서버(WAS : Web Application Server),
+    서블릿 컨테이너,
+    웹 컨테이너
+	https://tomcat.apache.org/download-90.cgi (Tomcat 9)
+
+    인코딩 변환 후 javaEE에서 server탭에서 톰캣추가
+    프로젝트 익스플로러에서 우클릭 > New > 다이나믹 웹 프로젝트 (만약 다른 프로젝트 선택되어있으면 컨트롤 + 좌클릭으로 선택 풀고 하기)
+    web.xml 생성 체크해서 생성 (Deployment Descriptor: 에서 우클릭 후 생성도 가능. 톰캣 실행시 읽는 파일)
+
+2. 인코딩 변환
+   : URIEncoding="UTF-8"
+	C:\oraclejava\apache-tomcat-9.0.74\conf   server.xml (에디트플러스 편집기 다운받아서 해당 편집기로 실행 또는 메모장으로 실행)
+	<Connector port="80" protocol="HTTP/1.1" 처럼 port="80"으로 변경 후 저장
+
+   윈도우 > 프리퍼런스 > Web > HTML, CSS, JSP   UTF-8로 변경
+   web.xml에 필터 추가 (1회성은 post방식으로 오는 정보 request.setCharacterEncoding("UTF-8");)
+     Libraries > Server Runtime > catalina.jar > org.apache.catalina.filters > SetCharacterEncodingFilter.class 우클릭 > Copy Qualified Name
+     <filter>
+  	<filter-name>set character encoding</filter-name>
+  	<filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+  	<init-param>
+  		<param-name>encoding</param-name>
+  		<param-value>UTF-8</param-value>
+  	</init-param>
+     </filter>
+     <filter-mapping>
+  	<filter-name>set character encoding</filter-name>
+	<url-pattern>/*</url-pattern>
+     </filter-mapping>
+
+3. 실행 브라우저
+   : 크롬
+
+4. get, post 방식으로 한글 테스트
+
+5. db 계정 생성 및 연결
+   : Connection 연결 테스트
+	JDBC(Java DataBase Connectivity)
+	: 자바를 이용해서 데이터베이스 프로그래밍을 쉽게 할 수 있도록 제공된 API
+		C:\app\A\product\21c\dbhomeXE\jdbc\lib\ojdbc8.jar 파일 복사해서 webapp > WEB-INF > lib 폴더에 붙여 넣어야 jdbc인식
+
+
+
+==================================================
+서블릿(Servlet)
+
+
+
+1. webdev > src/main/java > servlet > HelloServlet
+   서블릿이란?
+   : 1) 클라이언트의 요청을 받아 처리 및 응답해주는 자바 객체
+     2) 만드는 법 - HttpServlet을 상속받는다 (HttpServlet에서 중요한 메소드 3개. service(), doGet(), doPost())
+
+2. webdev > webapp > basic > test, cal
+   JSP(Java Server Page)
+   : JSP를 작성하면 톰캣이 .java 파일로 변환해준다.
+
+
+
+
+
+
+
+
+
+

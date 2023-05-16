@@ -1,0 +1,104 @@
+1. 이클립스 설치 및 설정
+
+2. java17 설치 및 환경변수 설정
+
+3. basic > DataType
+	자바 기본 자료형 (표현범위),
+	참조 자료형 (클래스, 인터페이스, 배열) : 숫자로 시작 불가, 특수문자는 $, _만 가능, 키워드 사용 불가
+	자바 이스케이프 시퀀스
+
+4. 연산자
+  1) basic > OpTest01
+	산술 연산자
+  2) basic > OpTest02
+	관계 연산자 (return boolean)
+  3) basic > OpTest03
+	논리 연산자
+  4) basic > OpTest04, OpTest05
+	증감 연산자 (전치, 후치)
+  5) basic > OpTest06
+	복합대입 연산자 (+= -= *= /= %=)
+  6) basic > OpTest07, OpTest08
+	삼항(조건) 연산자
+  7) basic > OpTest09, OpTest10
+	형변환, Math.random()
+		0.0 <= Math.random() < 1.0   //범위와 단위를 잘 생각할 것
+
+5. 스택, 힙 관계 (힙 메모리는 참조변수를 통해서만 접근 가능하다)
+
+6. Scanner
+
+7. 제어문
+  1) 조건문
+	basic > IfTest01~02
+		if
+	basic > SwitchTest01~03
+		switch ~ case
+  2) 반복문
+	basic > ForTest01~03
+		for
+	basic > WhileTest01~02
+		while
+	basic > DoWhileTest01~02
+		do~while
+  3) 기타
+	basic > ContinueTest01
+		continue
+	basic > BreakTest01
+		break
+		return
+
+8. 오라클 설치 (사용자 계정 영문이어야 한다, window11일 경우 해당 컴퓨터에 등록한 마소 계정과 pc이름이 같으면 안된다.)
+	DB비밀번호 : oraclejava
+	CDB PDB 관계
+	오라클 삭제할 때 제어판에서 지우고 c드라이브 app폴더 지우고 재부팅
+
+9. 오라클 설정
+	sys.sql
+		CREATE USER oraclejava    //아이디
+		identified by oraclejava     //비밀번호
+		default tablespace users    //테이블스페이스
+		quota unlimited on users   //용량 무제한 할당
+		temporary tablespace temp;   //임시 테이블스페이스
+
+		grant connect, resource to oraclejava;   //접속 권한부여, 리소스 권한부여(테이블, 뷰 등 생성 같은 작업)
+
+10. 배열
+	basic > ArrayTest01~02
+
+
+
+
+
+** 문제
+Q1. 정수를 입력받아 짝수인지 홀수인지 판별하세요.
+
+Q2. 4~15 사이의 정수
+Q3. 600~2300 사이의 100단위 정수
+	600	700	800	900 ~
+
+Q4. score(if)
+	0부터 100사이의 점수를 입력받아서
+		90점 이상이면 A
+		80점 이상 90점 미만이면 B
+		70점 이상 80점 미만이면 C
+		60점 이상 70점 미만이면 D
+		그 외에는 F를 출력하세요.
+
+Q5. switch~case
+	1: 남자
+	2: 여자
+	3: 남자
+	4: 여자
+	default: 에러
+	(Scanner 클래스 이용)
+Q6. score(switch~case)
+	0부터 100사이의 점수를 입력해서
+		90점 이상이면 A
+		80점 이상 90점 미만이면 B
+		70점 이상 80점 미만이면 C
+		60점 이상 70점 미만이면 D
+		그 외에는 F를 출력하세요.   //switch key에 넣을 값을 가공하면 case가 간단해질 수 있다. 이때, 경계값과 극값을 잘 생각할 것.
+
+Q7. 1부터 1000까지 정수 중 3의 배수의 합계를 구하세요. (for문)
+	166833
