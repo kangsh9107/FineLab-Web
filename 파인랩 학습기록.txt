@@ -127,6 +127,16 @@ formLogin()
 
 
 
+***** 2023-05-16
+위플 회원관리 Postman 사용해서 insert (response 따로 할 필요 없고, success만) / 전체 select / 조건 select (노출여부 등)
+위플 회원관리 API 명세서 작성
+
+
+
+
+
+
+
 
 
 
