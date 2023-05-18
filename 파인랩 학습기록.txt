@@ -129,7 +129,26 @@ formLogin()
 
 ***** 2023-05-16
 위플 회원관리 Postman 사용해서 insert (response 따로 할 필요 없고, success만) / 전체 select / 조건 select (노출여부 등)
-위플 회원관리 API 명세서 작성
+
+
+
+***** 2023-05-17
+위플 회원관리 CRUD
+Postman GET, POST 사용해보기
+
+완료 : select view, insert view, 페이징, 검색, view view
+할거 : update view, delete view, postman, 회원 게시판 엑셀 다운로드, API정의서 작성
+
+
+
+***** 2023-05-18
+농협 ERD분석 후 SQL 문제 풀기
+Util관련 코드 꾸준히 리딩하기
+이클립스 eXERD 설치 (https://m-ur-phy.tistory.com/m/entry/%EC%9D%B4%ED%81%B4%EB%A6%BD%EC%8A%A4-eXERD-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)
+
+완료 : update view, delete view, postman (insert, delete, update, select), 회원 게시판 엑셀 다운로드, API정의서 작성
+보완 : API정의서 (error 관련 추가하기)
+
 
 
 

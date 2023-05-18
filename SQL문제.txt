@@ -1,0 +1,28 @@
+-- 목표 달성 여부에 따라 해당 날짜 사이에 골드하트 받은 회원의 포인트 합산
+
+
+-- 전체 회원 중 앱 알림을 설정한 회원 인원수
+select count(*)
+from t_mb_mbr T1
+join t_mb_notf T2
+on T1.mb_seq = T2.mb_seq
+where T2.mn_notf_yn = 'Y';
+
+
+-- 종료된 단체배틀방 별 회원 인원 수
+-- select count(*)
+-- from t_bt_btl_rm;
+
+-- 4월 1~14일동안 스텝 합산이 10만 이상인 고객별 스텝으로 지급받은 포인트 합산
+-- select * from t_st_heart;
+
+
+-- 4월동안 주량을 10번 넘기고 상담동의한 회원들의 시퀀스와 이름, 전체 음주량
+select T1.mb_seq, T1.mb_nm, sum(T2.totl_drunk)
+from t_mb_mbr T1
+join t_alc_mgt T2 on T1.mb_seq = T2.mb_seq
+join t_alc_limit T3 on T1.mb_seq = T3.mb_seq
+group by T1.mb_seq, T1.mb_nm
+having ;
+
+select count(agree_yn) from t_alc_limit;
