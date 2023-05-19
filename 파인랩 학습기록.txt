@@ -151,6 +151,18 @@ Util관련 코드 꾸준히 리딩하기
 
 
 
+***** 2023-05-19
+농협 ERD분석 후 SQL 문제 풀기
+SSL VPN연결 후 CRM 통계 쿼리 작성
+
+SQL문법 실행 순서
+from 1
+where 2
+select 3
+gorup by 4
+having 5
+order by 6
+
 
 
 

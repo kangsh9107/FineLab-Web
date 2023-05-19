@@ -1,32 +1,102 @@
-간단 미션) 다음의 컬럼들과 조건을 가진 테이블을 생성해라.
-               BaseDomain을 extends하여 도메인을 구현하려 할 때 기존 구조와 형식을 맞출 것.
+-- 문제1 : 목표 달성 여부에 따라 해당 날짜 사이에 골드하트 받은 회원의 포인트 합산
+-- (해당 날짜 사이에 골드하트를 받은 회원들의 포인트 총합을 한번에 출력)
+-- (일일걷기 완료 : 하트1개 + 100포인트 지급)
+-- (하트 30개 수집 : 골드하트1개 + 300포인트 지급)
+-- (포인트는 자동지급으로 생각)
+select coalesce(sum(T1.mb_pnt), 0) as sum
+from t_mb_mbr T1
+         join t_st_heart T2 on T1.mb_seq = T2.mb_seq
+where to_date(sh_pay_ymd, 'YYYYMMDD') between to_date('2023-04-01', 'YYYY-MM-DD') and to_date('2023-04-14', 'YYYY-MM-DD')
+  and T2.sh_stp_ht_tp = '2'; -- 1:하트, 2:골드하트, 3:다이아하트
 
-상태 > 1. 가입 , 2. 탈퇴
-아이디
-비밀번호
-이름
-성별
-휴대전화
-등록일
-수정일
-노출여부 > Y, N
+-- (해당 날짜 사이에 골드하트를 받은 회원들의 골드하트로 얻은 포인트 총합을 각각 출력)
+-- select T1.mb_seq, count(T2.sh_stp_ht_tp) * 300 as sum
+-- from t_mb_mbr T1
+--          join t_st_heart T2 on T1.mb_seq = T2.mb_seq
+-- where to_date(sh_pay_ymd, 'YYYYMMDD') between to_date('2023-04-01', 'YYYY-MM-DD') and to_date('2023-04-14', 'YYYY-MM-DD')
+--   and T2.sh_stp_ht_tp = '2' -- 1:하트, 2:골드하트, 3:다이아하트
+-- group by T1.mb_seq;
 
 
-등록일, 수정일 은 디폴트 값이 오늘/현시간
-모든 컬럼 not null
 
 
-create table t_sh_mbr (
-    mb_seq integer primary key,
-    mb_stat char(1) not null check (mb_stat='1' or mb_stat='2') ,
-    mb_id varchar(15) not null ,
-    mb_pwd varchar(20) not null ,
-    mb_nm varchar(90) not null ,
-    mb_gen char(1) not null check (mb_gen='M' or mb_gen='F') ,
-    mb_ph varchar(25) not null ,
-    mb_strt_ymd char(8) not null ,
-    mb_mod_ymd char(8) not null ,
-    mb_exps_yn char(1) not null check (mb_exps_yn='Y' or mb_exps_yn='N')
-);
 
-create sequence t_sh_mb_seq;
+-- 문제2 : 전체 회원 중 앱 알림을 설정한 회원 인원수
+-- (알림 유형별로)
+select coalesce(count(T1.mb_seq), 0) as count
+from t_mb_mbr T1
+         join t_mb_notf T2 on T1.mb_seq = T2.mb_seq
+where T2.mn_notf_yn = 'Y'
+  and T2.mn_notf_tp = '01'; -- 01:앱 알림, 02:복약 알림, 03:마케팅 수신 동의
+
+
+
+
+
+-- 문제3 : 종료된 단체배틀방 별 회원 인원 수
+-- (배틀방 유형별로)
+select T1.btl_rm_seq, count(T2.btl_rm_mbr_seq)
+from t_bt_btl_rm T1
+         join t_bt_btl_rm_mbr T2 on T1.btl_rm_seq = T2.btl_rm_seq
+where to_date(T1.br_end_ymd, 'YYYYMMDD') <= to_date(to_char(now(), 'YYYYMMDD'), 'YYYYMMDD')
+  and br_btl_rm_tp = '02' -- 01:개인, 02:단체, 03:그룹, 04:그룹내 배틀방
+group by T1.btl_rm_seq;
+
+
+
+
+
+-- 문제4 : 4월 1~14일동안 스텝 합산이 10만 이상인 고객별 스텝으로 지급받은 포인트 합산
+-- (해당 날짜 사이에 스텝 총합이 10만 이상인 고객들의 포인트 총합을 한번에 출력)
+select T1.mb_seq, sum(T1.mb_pnt)
+from t_mb_mbr T1
+         join t_st_heart T2 on T1.mb_seq = T2.mb_seq
+where T1.mb_seq in (select T1.mb_seq
+                    from t_mb_mbr T1
+                             join t_st_day T2 on T1.mb_seq = T2.mb_seq
+                    where to_date(T2.dy_ymd, 'YYYYMMDD') between to_date('2023-04-01', 'YYYY-MM-DD') and to_date('2023-04-14', 'YYYY-MM-DD')
+                    group by T1.mb_seq, T1.mb_pnt
+                    having sum(T2.dy_stp_cnt) >= 100000)
+group by T1.mb_seq;
+
+-- (해당 날짜 사이에 스텝 총합이 10만 이상인 고객들이 하트로 얻은 포인트 총합을 각각 출력)
+select T1.mb_seq, sum(case when T2.sh_stp_ht_tp = '3' then cast(T2.sh_stp_ht_tp as int) * 9999999
+                           when T2.sh_stp_ht_tp = '2' then cast(T2.sh_stp_ht_tp as int) * 300
+                           else cast(T2.sh_stp_ht_tp as int) * 100
+                      end)
+from t_mb_mbr T1
+         join t_st_heart T2 on T1.mb_seq = T2.mb_seq
+where to_date(sh_pay_ymd, 'YYYYMMDD') between to_date('2023-04-01', 'YYYY-MM-DD') and to_date('2023-04-14', 'YYYY-MM-DD')
+  and T1.mb_seq in (select T1.mb_seq
+                    from t_mb_mbr T1
+                             join t_st_day T2 on T1.mb_seq = T2.mb_seq
+                    where to_date(T2.dy_ymd, 'YYYYMMDD') between to_date('2023-04-01', 'YYYY-MM-DD') and to_date('2023-04-14', 'YYYY-MM-DD')
+                    group by T1.mb_seq, T1.mb_pnt
+                    having sum(T2.dy_stp_cnt) >= 100000)
+group by T1.mb_seq;
+
+
+
+
+
+-- 문제5 : 4월동안 주량을 10번 넘기고 상담동의한 회원들의 시퀀스와 이름, 전체 음주량
+select T1.mb_seq, T1.mb_nm, sum(T2.totl_drunk)
+from t_mb_mbr T1
+         join t_alc_mgt T2 on T1.mb_seq = T2.mb_seq
+         join t_alc_limit T3 on T1.mb_seq = T3.mb_seq
+where to_date(T2.drunk_ymd, 'YYYYMMDD') between to_date('2022-09-01', 'YYYY-MM-DD') and to_date('2022-09-30', 'YYYY-MM-DD')
+  and T3.agree_yn = 'Y'
+group by T1.mb_seq, T1.mb_nm
+having count(T2.my_alc_limit_yn = 'Y') > 10;
+
+
+
+
+1. join의 경우 null값이 엮일 수 있으니 left나 right로 확실하게 지정하기
+2. like, between, in은 성능이 안좋으니 되도록 피하기
+3. join 최소화 하기
+4. 월별 통계 뽑을때 YYYYMMDD 데이터를 left로 왼쪽부터 6개 잘라서 사용하는 방법도 있다
+
+
+
+
