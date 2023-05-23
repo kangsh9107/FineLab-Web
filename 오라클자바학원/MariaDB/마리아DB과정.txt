@@ -1,0 +1,28 @@
+** 2023-05-23
+1. 개발환경 설정
+	1) MariaDB
+	   : LTS버전 중 최신. 5년간은 강제 업데이트 하지 않고 버전 유지한다는 의미.
+	     https://mariadb.org/download/?t=mariadb&p=mariadb&r=11.1.0&os=windows&cpu=x86_64&pkg=msi&m=blendbyte
+
+	2) 자바11
+
+	3) 이클립스
+	   : eclipse.ini를 notepad++로 열어서 경로 중 H를 C로 변경.
+
+	4) notepad++
+
+	5) mariadb connecter/j
+	   : JDBC driver. java -> mariadb 접근을 돕는다.
+	   : Build Path > Configure Build Path > classpath에 다운받은 jar파일 추가.
+	     https://mariadb.com/downloads/connectors/connectors-data-access/java8-connector/
+
+	6) DBeaver Community Edition
+	    https://dbeaver.io/download/
+
+2. csv파일을 활용한 대량 insert
+	load data infile 'c:/temp/departments.csv'
+	into table departments
+	fields terminated by ','
+	lines terminated by '\r\n'
+	ignore 1 lines
+	(id, name);

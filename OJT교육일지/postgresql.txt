@@ -92,6 +92,7 @@ having count(T2.my_alc_limit_yn = 'Y') > 10;
 
 
 
+
 1. join의 경우 null값이 엮일 수 있으니 left나 right로 확실하게 지정하기
 2. like, between, in은 성능이 안좋으니 되도록 피하기
 3. join 최소화 하기
@@ -100,3 +101,38 @@ having count(T2.my_alc_limit_yn = 'Y') > 10;
 
 
 
+
+-- CRM 위플지류합 통계
+select C.본부, C.사업단, C.이름, C.성별, C.생년월일, C.등급, C.위플등록일, (case C.cu_acnt
+                                                                        when '지류고객' then D.reg_dt
+                                                                        else null
+                                                                    end) as 신청서등록일, C.TFA이름, C.TFA코드
+from (
+      select cu_acnt, cu_seq, B.bonbu_nm as 본부, B.bran_nm as 사업단, A.cu_nm as 이름, A.cu_sex as 성별, A.cu_brtdy as 생년월일,
+             (case gd_cd
+                  when 4379 then '하이브리드'
+                  when 4317 then '일반'
+                  when 4266 then '일반'
+                  when 4286 then '일반'
+                  when 4267 then 'VIP'
+                  when 4268 then 'VVIP'
+             end) as 등급, left(A.cu_agree_ymdt1, 8) as 위플등록일, A.cu_rgst_ymd as 신청서등록일, B.tfa_name as TFA이름, B.tfa_code as TFA코드
+      from (
+            select *
+            from t_cu_cust where cu_agree_yn1 = 'Y'
+                             and left(cu_agree_ymdt1, 8) < convert(varchar(80), getdate(), 112)
+                             and (left(cu_agree_ymdt1, 6) = left(convert(varchar(80), getdate(), 112), 6) and (co_cd = 'X28' or co_cd = 'A00'))
+                              or (cu_acnt = '지류고객' and left(cu_rgst_ymd, 8) < convert(varchar(80), getdate(), 112) and left(cu_rgst_ymd, 6) = left(convert(varchar(80), getdate(), 112), 6))
+                             and (co_cd = 'X28' or co_cd = 'A00')
+           ) as A
+      left join (
+                 select *
+                 from crm_aplus_staff
+                ) as B on A.cu_extnl_certi_cd = B.tfa_code
+     ) as C
+left join (
+           select *
+           from aplus_customer_paper where left(reg_dt, 6) = left(convert(varchar(80), getdate(), 112), 6)
+                                       and (cpcode = 'X28' or cpcode = 'A00')
+          ) as D on C.cu_seq = D.cu_seq
+order by 본부, 사업단, 위플등록일, 신청서등록일;
