@@ -3,11 +3,11 @@
 -- (일일걷기 완료 : 하트1개 + 100포인트 지급)
 -- (하트 30개 수집 : 골드하트1개 + 300포인트 지급)
 -- (포인트는 자동지급으로 생각)
-select coalesce(sum(T1.mb_pnt), 0) as sum
-from t_mb_mbr T1
-         join t_st_heart T2 on T1.mb_seq = T2.mb_seq
-where to_date(sh_pay_ymd, 'YYYYMMDD') between to_date('2023-04-01', 'YYYY-MM-DD') and to_date('2023-04-14', 'YYYY-MM-DD')
-  and T2.sh_stp_ht_tp = '2'; -- 1:하트, 2:골드하트, 3:다이아하트
+select sum(T2.mb_pnt) as sum
+from t_st_heart  T1
+         left join t_mb_mbr T2 on T1.mb_seq = T2.mb_seq
+where T1.sh_pay_ymd >= '20230401' and T1.sh_pay_ymd <= '20230414'
+  and T1.sh_stp_ht_tp = '2'; -- 1:하트, 2:골드하트, 3:다이아하트
 
 -- (해당 날짜 사이에 골드하트를 받은 회원들의 골드하트로 얻은 포인트 총합을 각각 출력)
 -- select T1.mb_seq, count(T2.sh_stp_ht_tp) * 300 as sum
