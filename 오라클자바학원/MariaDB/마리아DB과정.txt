@@ -19,10 +19,90 @@
 	6) DBeaver Community Edition
 	    https://dbeaver.io/download/
 
-2. csv파일을 활용한 대량 insert
+2. csv파일을 활용한 대량 INSERT
+	LOAD DATA INFILE 'CSV파일명'
+	INTO TABLE 테이블명
+	FIELDS TERMINATED BY '필드구분자문자열' 
+	     OPTIONALLY ENCLOSED BY '문자'
+	     ESCAPED BY '문자'
+	LINES TERMINATED BY '라인구분자문자열'
+	IGNORE 1 LINES
+	(컬럼명, ...)
+
+	예시1)
 	load data infile 'c:/temp/departments.csv'
 	into table departments
 	fields terminated by ','
 	lines terminated by '\r\n'
 	ignore 1 lines
 	(id, name);
+
+	예시2)
+	load data infile 'c:/temp/dataset3.csv'
+	into table invoice
+	fields terminated by ';'
+		optionally enclosed by '"'
+	lines terminated by '\n'
+	ignore 1 lines
+	(invoice_no, stock_code, description, quantity, unit_price, customer_id, country, invoice_date);
+
+3. CISUD
+	1) Create : database, table, view
+
+	2) Insert
+
+	3) Select : join, order by
+
+	4) Update
+
+	5) Delete
+
+
+
+
+
+** 2023-05-24
+4. VIEW
+	1) insert, update, delete
+
+	2) view를 통해 데이터의 수정이나 삭제를 할 수 없는 경우
+		집계 함수를 사용한 뷰
+		union all, join 등을 사용한 뷰
+		distinct, group by 등을 사용한 뷰
+
+5. 트리거
+	delimiter $$
+	CREATE TRIGGER 트리거이름
+	BEFORE / AFTER 이벤트명 ON 테이블명 (이벤트 실행 전 트리거 발동, 이벤트 실행 후 트리거 발동)
+	FOR EACH ROW
+	BEGIN
+		명령문
+	END $$
+	delimiter ; (delimiter는 문법의 시작과 끝을 나타냄)
+
+6. 각종 함수
+	1) in, not in, between, like, distinct, group by, with rollup, limit
+
+	2) ifnull, length, concat, left
+
+	3) cast, if
+
+	4) row_number, rank, dense_rank, ntile
+
+7. join
+
+8. subquery
+
+9. 샘플 데이터 가져오기
+	source c:/temp/mysqlsampledatabase.sql
+
+
+
+
+
+
+
+
+
+
+
