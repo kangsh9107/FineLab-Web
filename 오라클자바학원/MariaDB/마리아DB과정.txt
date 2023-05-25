@@ -100,7 +100,66 @@
 
 
 
+** 2023-05-25
+10. 인덱스
+	fulltext
+	: innodb_ft_min_token_size=2 ## my.ini > mysqld에 추가하면 최소 검색 글자수가 2글자로 변경된다.
+	: create fulltext index 인덱스명 on 테이블명(컬럼명);
 
+	: set global innodb_ft_aux_table = 'DB명/테이블명';
+	: select * from information_schema.innodb_ft_index_table; 로 인덱스를 확인 할 수 있다.
+
+	: in boolean mode 검색
+		select * from 테이블명 where match(컬럼명) against('검색어1 +검색어2' in boolean mode);
+		'검색어1'을 찾되 반드시 '검색어2'가 들어가 있는 열
+
+		select * from 테이블명 where match(컬럼명) against('검색어1 -검색어2' in boolean mode);
+		'검색어1'을 찾되 '검색어2'는 안 들어가 있는 열
+
+		select * from 테이블명 where match(컬럼명) against('검색어1 ~검색어2' in boolean mode);
+		'검색어1'을 찾되 '검색어2'가 없는 열보다 '검색어2'가 있는 열이 아래 순위
+
+		select * from 테이블명 where match(컬럼명) against('검색어1*' in boolean mode);
+		'검색어1'이 들어간 부분검색 (like 대체)
+
+		select * from 테이블명 where match(컬럼명) against("검색어1" in boolean mode);
+		"검색어1"과 정확히 동일한 철자의 구문
+
+	: 검색 중지 단어
+		1) drop index movie on movie;
+		   만들어져 있는 fulltext index 삭제
+
+		2) create table user_stopword (value varchar(30));
+		   중지단어를 넣을 테이블 생성. 컬럼은 value, 타입은 varchar로 해야 한다.
+
+		3) insert into user_stopword values ('그는'), ('그리고') ... ;
+
+		4) set global innodb_ft_server_stopword_table = 'DB명/중지테이블명';
+		   모두 소문자로 작성한다.
+
+		5) create fulltext index movie on movie(description);
+		   다시 fulltext index 생성
+
+		6) select * from information_schema.innodb_ft_index_table;
+		   mysql 기본 중지 단어 + 추가한 중지단어를 제외한 인덱스 단어들이 생성되어 있는 것을 확인한다.
+
+11. 파티션
+     : MySQL 서버 입장에서는 데이터를 별도의 테이블로 분리해서 저장하지만
+       사용자 입장에서는 하나의 테이블로 읽기와 쓰기를 할 수 있게 해준다.
+
+	insert, select 성능 향상
+	데이터의 물리적 저장소 분리를 통해 파티션 별로 데이터를 구분할 수 있다.
+
+	partition by range(컬럼명) (partition 파티션명 values less than (값), ...);
+
+12. 함수
+
+13. 프로시져
+
+14. 커서
+
+15. eclipse, gradle, mariaDB, thymeleaf
+	CRUD
 
 
 
