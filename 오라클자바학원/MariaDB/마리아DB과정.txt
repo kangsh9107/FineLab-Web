@@ -91,7 +91,7 @@
 
 7. join
 
-8. subquery
+8. subquery를 활용한 성능 개선
 
 9. 샘플 데이터 가져오기
 	source c:/temp/mysqlsampledatabase.sql
@@ -161,6 +161,69 @@
 15. eclipse, gradle, mariaDB, thymeleaf
 	CRUD
 
+
+
+
+
+** 2023-05-26
+16. eclipse, gradle, mariaDB, thymeleaf
+	CRUD
+
+17. insert시 password 암호화 트리거 적용
+	트리거 사용시 순환참조 조심
+
+18. DB백업
+	DB백업 만들기
+	: 백업을 위한 최소 권한을 부여한 계정을 생성한다.
+	  (root계정으로 백업을 진행하면 백업 자동화를 위해 비밀번호를 어딘가 적어둘 때 문제가 생길 수 있음)
+	: heidisql 좌측필터에서 DB명 우클릭 > 데이터베이스를 sql로 내보내기
+
+	DB백업 불러오기
+	: 다른 DB선택하고, heidisql 상단메뉴바에서 파일 > sql파일 불러오기로 내보낸 sql선택 > F9 눌러서 전체 실행 (경고 무시)
+
+	툴이 없고 window cmd로 DB백업 만들기
+	: mysqldump 프로그램이 있는 bin으로 경로 이동
+	: create user 'backupuser'@'localhost' identified by 'oraclejava';     (계정명과 비밀번호 설정해서 생성)
+	: grant select, show view, lock tables, reload, replication client on *.* to 'backupuser'@'localhost';     (백업을 위한 최소권한 부여)
+	: flush privileges;     (부여한 권한 바로 적용)
+
+	: mysqldump -u 계정명 -p DB명 > C:\DB백업\test1.sql
+
+19. DB복원
+	heidisql, dbeaver는 해당 툴의 백업, 복원 기능 이용. 복원할 DB를 미리 생성해둔다.
+
+	terminal
+	: mysql 프로그램이 있는 bin으로 경로 이동
+	: mysql -u 계정명 -p DB명 < test1.sql
+
+20. sql -> html, xml
+	: mysql 있는 bin 경로로 간다
+	: mysql -u 계정명 -p --html DB명 < isfdb-001.sql > isfdb-001.html
+	: mysql -u 계정명 -p --xml DB명 < isfdb-001.sql > isfdb-001.xml
+
+21. json구조 select
+create table locations (
+	id int not null auto_increment,
+	name varchar(100) not null,
+	latitude decimal(9,6) not null,
+	longitude decimal(9,6) not null,
+	attr json,
+	primary key(id)
+);
+
+insert into locations
+(name, latitude, longitude, attr)
+values
+('이마트구로점', 38.0021628, 126.725566,
+'{"details":{"name":"마트", "url":"http://www.emart.com"}, "comment":"가지마라!"}');
+
+select name, latitude, longitude,
+		json_value(attr, '$.details.name') name,
+		json_value(attr, '$.comment') comment
+from locations;
+
+22. datetime(6)
+	100만분의 1초 (소수점 6째 자리까지 저)
 
 
 
