@@ -1,0 +1,66 @@
+-- 해당 기간에 골드하트를 받은 회원의 seq, 보유 포인트, 골드하트로 얻은 포인트 합산
+select T2.mb_seq, T2.mb_pnt, sum(case T1.sh_pnt_pay_yn when 'Y' then 300 else 0 end) as 골드하트로얻은포인트
+from t_st_heart T1
+left join t_mb_mbr T2 on T1.mb_seq = T2.mb_seq
+where (T1.sh_pay_ymd >= '20230401' and T1.sh_pay_ymd <= '20230414')
+  and T1.sh_stp_ht_tp = '2'
+group by T2.mb_seq, T2.mb_pnt;
+
+
+
+
+
+-- 앱 알림을 설정한 회원수
+select count(mb_seq)
+from t_mb_mbr T1
+left join t_mb_notf T2 on T1.mb_seq = T2.mb_seq
+where T2.mn_notf_yn = 'Y'
+  and T2.mn_notf_tp = '01';
+
+
+
+
+
+-- 종료된 단체배틀방 별 인원 수
+select T1.btl_rm_seq, count(T2.btl_rm_mbr_seq)
+from t_bt_btl_rm T1
+left join t_bt_btl_rm_mbr T2 on T1.btl_rm_seq = T2.btl_rm_seq
+where T1.br_end_ymd <= left(now(), 8)
+  and T1.br_btl_rm_tp = '02'
+group by T1.btl_rm_seq;
+
+
+
+
+
+-- 해당 기간에 걸음수 합이 10만 이상인 회원의 seq, 걸음수로 지급 받은 하트로 얻은 포인트 합산
+select T1.mb_seq, sum(case when (T2.sh_stp_ht_tp = '1' and T2.sh_pnt_pay_yn = 'Y') then 100
+                           when (T2.sh_stp_ht_tp = '2' and T2.sh_pnt_pay_yn = 'Y') then 300
+                           when (T2.sh_stp_ht_tp = '3' and T2.sh_pnt_pay_yn = 'Y') then 99999
+                           else 0
+                      end) as 스텝으로얻은하트로얻은포인트합산
+from t_mb_mbr T1
+left join t_st_heart T2 on T1.mb_seq = T2.mb_seq
+left join t_st_day T3 on T1.mb_seq = T3.mb_seq
+where (T3.dy_ymd >= '20230401' and T3.dy_ymd <= '20230414')
+group by T1.mb_seq
+having sum(T3.dy_stp_cnt) >= 100000;
+
+
+
+
+
+-- 4월동안 음주량을 10번 넘기고, 상담동의한 회원들의 seq, 이름, 전체 음주량 합산
+select T1.mb_seq, T1.mb_nm, sum(T2.totl_drunk) as 전체음주량합산
+from t_mb_mbr T1
+left join t_alc_mgt T2 on T1.mb_seq = T2.mb_seq
+left join t_alc_limit T3 on T1.mb_seq = T3.mb_seq
+where (T2.drunk_ymd >= '20230401' and T2.drunk_ymd <= '20230430')
+  and T3.agree_yn = 'Y'
+group by T1.mb_seq, T1.mb_nm
+having count(T2.my_alc_limit_yn = 'Y') > 10;
+
+
+
+
+
